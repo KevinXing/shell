@@ -1,0 +1,105 @@
+Name: Zhekai Xing
+UNI:  zx2198
+***********************
+makefile usage:
+	make:
+		make w4118_sh
+	make clean: 
+		delete w4118_sh and shell.o
+***********************
+files:
+	shell.c: 
+		source code
+	README:
+	makefile:
+***********************
+differs:
+	1. "/bin/ls|" will execute "/bin/ls" without any error info.
+	   The idea is that when we type "ls|" in bash shell, it will prompt out ">" and wait for the 2nd 
+	   command of the pipe. Though I do not implement this feature, I think it is ok to consider that
+	   "bin/ls||" is a right command and ignore the "|"
+
+	2. "/bin/ls||" will report an error without executing "/bin/ls"
+	   Though "ls||" is the same with "ls|" in bash shell, and "ls|||" is considered an invalid command
+	   in bash shell. I treat "/bin/ls||" as an invalid command, as well as "/bin/ls|||"
+***********************
+additional info:
+	1. The Marco HISTORY_SIZE is set to 101, but the "distory" command will display 100 comands. 
+	   Just for clear that.
+***********************
+test run result:
+
+$ls
+error: ls: No such file or directory
+$/bin/ls
+makefile  README  session.txt  shell.c	shell.o  w4118_sh
+$/bin/ls| 
+makefile  README  session.txt  shell.c	shell.o  w4118_sh
+$/bin/ls||
+error: syntax error
+$/bin/ls| /bin/grep sh |/bin/grep c
+shell.c
+$|||||
+error: syntax error
+$/bin/ls| abc | /bin/grep a
+error: abc: No such file or directory
+$history
+0 ls
+1 /bin/ls
+2 /bin/ls|
+3 /bin/ls| /bin/grep sh |/bin/grep c
+4 /bin/ls| abc | /bin/grep a
+$history| 
+0 ls
+1 /bin/ls
+2 /bin/ls|
+3 /bin/ls| /bin/grep sh |/bin/grep c
+4 /bin/ls| abc | /bin/grep a
+$history| abc
+error: buildin in pipe cmd
+$history 3 
+shell.c
+$history abcd
+error: invalid cmd
+$history -1
+error: invalid cmd
+$history 
+0 ls
+1 /bin/ls
+2 /bin/ls|
+3 /bin/ls| /bin/grep sh |/bin/grep c
+4 /bin/ls| abc | /bin/grep a
+5 history| abc
+$history -c
+$history
+$/bin/ls|history|/bin/grep h
+error: history: No such file or directory
+$/bin/pwd
+/home/uestcxzk/OS/hmwk1-KevinXing/shell
+$cd ..
+$/bin/pwd
+/home/uestcxzk/OS/hmwk1-KevinXing
+$cd /home/uestcxzk/OS/hmwk1-KevinXing/shell     
+$/bin/pwd
+/home/uestcxzk/OS/hmwk1-KevinXing/shell
+$cd|||
+error: syntax error
+$/bin/echo blah|/bin/grep b|/usr/bin/cut -b 3,4
+ah
+$/bin/echo blah|||/bin/grep b||/usr/bin/cut
+error: syntax error
+$history | /bin/grep hello
+error: buildin in pipe cmd
+$history
+0 /bin/ls|history|/bin/grep h
+1 /bin/pwd
+2 cd ..
+3 /bin/pwd
+4 cd /home/uestcxzk/OS/hmwk1-KevinXing/shell
+5 /bin/pwd
+6 /bin/echo blah|/bin/grep b|/usr/bin/cut -b 3,4
+7 history | /bin/grep hello
+$exit abcd
+  
+
+
